@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block contenido %}
+<style>
+    p{
+        color:blue
+    }
+</style>
+<h1>Hola</h1><br><h1>Hola</h1><br><h1>Hola</h1><br><h1>Hola</h1><br><h1>Hola</h1><br><h1>Hola</h1><br><h1>Hola</h1><br><h1>Hola</h1><br><h1>Hola</h1><br><h1>Hola</h1><br><h1>Hola</h1><br><h1>Hola</h1><br><h1>Hola</h1><br><h1>Hola</h1><br><h1>Hola</h1><br><h1>Hola</h1><br>
+<div id="content">
+
+</div>
+
+<script>
+    function crearMensaje(){
+        var div=document.getElementById("content");
+        var p= document.createElement("p");
+        p.innerHTML="Este es un texto dinamico";
+        div.appendChild(p);
+    }
+
+    window.addEventListener('scroll',()=>{
+        if((window.innerHeight + window.scrollY) >= document.body.offsetHeight){
+            crearMensaje()
+        }
+    })
+    
+</script>
+
+{% endblock %}
