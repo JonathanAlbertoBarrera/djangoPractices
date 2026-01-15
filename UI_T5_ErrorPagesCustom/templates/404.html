@@ -1,13 +1,368 @@
 {% extends "base.html" %}
+{% load static %}
 
-{% block titulo %}
-Error 404
+{% block titulo %}Página No Encontrada - Error 404{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .error-container {
+        text-align: center;
+        padding: 40px 20px;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .error-image {
+        max-width: 400px;
+        margin: 30px auto;
+        animation: wiggle 2s ease-in-out infinite;
+    }
+
+    @keyframes wiggle {
+        0%, 100% {
+            transform: rotate(0deg);
+        }
+        25% {
+            transform: rotate(-5deg);
+        }
+        75% {
+            transform: rotate(5deg);
+        }
+    }
+
+    .error-image img {
+        width: 100%;
+        height: auto;
+        filter: drop-shadow(0 10px 30px rgba(0,0,0,0.2));
+    }
+
+    .error-code {
+        font-size: 8rem;
+        font-weight: 700;
+        background: var(--gradient-2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin: 20px 0;
+        line-height: 1;
+        animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0.7;
+        }
+    }
+
+    .error-title {
+        font-size: 2.5rem;
+        color: var(--dark-color);
+        margin-bottom: 20px;
+        font-family: 'Pacifico', cursive;
+    }
+
+    .error-message {
+        font-size: 1.2rem;
+        color: #666;
+        margin-bottom: 40px;
+        line-height: 1.6;
+    }
+
+    .search-box {
+        background: white;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        margin: 40px 0;
+    }
+
+    .search-box h3 {
+        color: var(--dark-color);
+        margin-bottom: 20px;
+        font-size: 1.5rem;
+    }
+
+    .search-form {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .search-input {
+        flex: 1;
+        padding: 15px 20px;
+        border: 2px solid #e0e0e0;
+        border-radius: 30px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .search-input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+    }
+
+    .search-btn {
+        padding: 15px 30px;
+        background: var(--gradient-vet);
+        color: white;
+        border: none;
+        border-radius: 30px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .search-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(67, 206, 162, 0.4);
+    }
+
+    .search-result {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 10px;
+        display: none;
+    }
+
+    .search-result.success {
+        background: #d4edda;
+        color: #155724;
+        display: block;
+    }
+
+    .search-result.error {
+        background: #f8d7da;
+        color: #721c24;
+        display: block;
+    }
+
+    .pages-list {
+        background: white;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        margin: 40px 0;
+    }
+
+    .pages-list h3 {
+        color: var(--dark-color);
+        margin-bottom: 20px;
+        font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+    }
+
+    .pages-list h3:hover {
+        color: var(--primary-color);
+    }
+
+    .toggle-icon {
+        transition: transform 0.3s ease;
+    }
+
+    .toggle-icon.open {
+        transform: rotate(180deg);
+    }
+
+    .pages-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+    }
+
+    .pages-content.open {
+        max-height: 500px;
+    }
+
+    .page-item {
+        padding: 15px;
+        margin: 10px 0;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        transition: all 0.3s ease;
+    }
+
+    .page-item:hover {
+        transform: translateX(10px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .page-item i {
+        font-size: 1.5rem;
+        color: var(--primary-color);
+    }
+
+    .page-item a {
+        color: var(--dark-color);
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .actions {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 30px;
+    }
+
+    @media (max-width: 768px) {
+        .error-code {
+            font-size: 5rem;
+        }
+
+        .error-title {
+            font-size: 1.8rem;
+        }
+
+        .search-form {
+            flex-direction: column;
+        }
+
+        .search-btn {
+            width: 100%;
+        }
+    }
+</style>
 {% endblock %}
 
 {% block contenido %}
-    <h1>Error 404</h1>
+<div class="error-container">
+    <div class="error-image">
+        <img src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f436.svg" alt="Perrito Perdido"/>
+    </div>
+
+    <div class="error-code">404</div>
+    <h1 class="error-title">¡Ups! Esta página se perdió</h1>
+    <p class="error-message">
+        Al igual que un perrito perdido, esta página no se encuentra donde debería estar. 
+        <br>Pero no te preocupes, ¡te ayudaremos a encontrar el camino correcto!
+    </p>
+
+    <!-- Search Box -->
+    <div class="search-box">
+        <h3><i class="fas fa-search"></i> Buscar una página</h3>
+        <form class="search-form" onsubmit="searchPage(event)">
+            <input type="text" 
+                   id="searchInput" 
+                   class="search-input" 
+                   placeholder="Escribe 'inicio', 'servicios', 'contacto'..." 
+                   required>
+            <button type="submit" class="search-btn">
+                <i class="fas fa-search"></i> Buscar
+            </button>
+        </form>
+        <div id="searchResult" class="search-result"></div>
+    </div>
+
+    <!-- Available Pages List -->
+    <div class="pages-list">
+        <h3 onclick="togglePages()">
+            <span><i class="fas fa-sitemap"></i> Ver todas las secciones disponibles</span>
+            <i class="fas fa-chevron-down toggle-icon" id="toggleIcon"></i>
+        </h3>
+        <div class="pages-content" id="pagesContent">
+            <div class="page-item">
+                <i class="fas fa-home"></i>
+                <a href="/">Página Principal - Conoce VetCare</a>
+            </div>
+            <div class="page-item">
+                <i class="fas fa-heartbeat"></i>
+                <a href="/#servicios">Servicios Veterinarios</a>
+            </div>
+            <div class="page-item">
+                <i class="fas fa-phone"></i>
+                <a href="/#contacto">Contacto y Citas</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="actions">
+        <a href="/" class="btn btn-primary">
+            <i class="fas fa-home"></i> Ir al Inicio
+        </a>
+        <a href="javascript:history.back()" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Volver Atrás
+        </a>
+    </div>
+</div>
 {% endblock %}
 
-{% block mensaje %}
-    <h1>Regresa al inicio</h1>
+{% block extra_scripts %}
+<script>
+    function togglePages() {
+        const content = document.getElementById('pagesContent');
+        const icon = document.getElementById('toggleIcon');
+        
+        content.classList.toggle('open');
+        icon.classList.toggle('open');
+    }
+
+    function searchPage(event) {
+        event.preventDefault();
+        
+        const searchInput = document.getElementById('searchInput');
+        const searchResult = document.getElementById('searchResult');
+        const query = searchInput.value.toLowerCase().trim();
+        
+        // Define available pages
+        const pages = {
+            'inicio': '/',
+            'home': '/',
+            'principal': '/',
+            'index': '/',
+            'servicios': '/#servicios',
+            'servicio': '/#servicios',
+            'contacto': '/#contacto',
+            'contactar': '/#contacto',
+            'cita': '/#contacto',
+            'agendar': '/#contacto',
+        };
+        
+        // Search for matching page
+        if (pages[query]) {
+            searchResult.className = 'search-result success';
+            searchResult.innerHTML = `
+                <i class="fas fa-check-circle"></i> 
+                ¡Página encontrada! Redirigiendo a <strong>${query}</strong>...
+            `;
+            
+            setTimeout(() => {
+                window.location.href = pages[query];
+            }, 1500);
+        } else {
+            searchResult.className = 'search-result error';
+            searchResult.innerHTML = `
+                <i class="fas fa-times-circle"></i> 
+                No encontramos ninguna página con ese nombre. 
+                Intenta con: "inicio", "servicios", o "contacto"
+            `;
+        }
+    }
+
+    // Add animation when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        const container = document.querySelector('.error-container');
+        container.style.opacity = '0';
+        container.style.transform = 'translateY(30px)';
+        
+        setTimeout(() => {
+            container.style.transition = 'all 0.6s ease';
+            container.style.opacity = '1';
+            container.style.transform = 'translateY(0)';
+        }, 100);
+    });
+</script>
 {% endblock %}

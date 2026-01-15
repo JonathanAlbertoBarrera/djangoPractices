@@ -1,11 +1,320 @@
 {% extends "base.html" %}
 {% load static %}
-{% block titulo %} Página Principal {% endblock %}
 
-{% block contenido %} 
+{% block titulo %}VetCare - Clínica Veterinaria de Confianza{% endblock %}
 
-<h1> Bienvenido a la Página Principal </h1>
+{% block extra_styles %}
+<style>
+    .hero {
+        text-align: center;
+        padding: 60px 20px;
+        background: linear-gradient(135deg, rgba(67, 206, 162, 0.1) 0%, rgba(24, 90, 157, 0.1) 100%);
+        border-radius: 20px;
+        margin-bottom: 50px;
+        animation: fadeIn 1s ease-in;
+    }
 
-<img src="{% static 'img/logo.png'  %}"  alt="Logo de la Página"/>
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 
+    .hero h1 {
+        font-size: 3rem;
+        color: var(--dark-color);
+        margin-bottom: 20px;
+        font-family: 'Pacifico', cursive;
+    }
+
+    .hero p {
+        font-size: 1.3rem;
+        color: #555;
+        margin-bottom: 30px;
+    }
+
+    .hero-image {
+        max-width: 300px;
+        margin: 30px auto;
+        animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-20px);
+        }
+    }
+
+    .hero-image img {
+        width: 100%;
+        height: auto;
+        border-radius: 50%;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+
+    .services {
+        margin: 60px 0;
+    }
+
+    .section-title {
+        text-align: center;
+        font-size: 2.5rem;
+        color: var(--dark-color);
+        margin-bottom: 50px;
+        position: relative;
+    }
+
+    .section-title::after {
+        content: '';
+        display: block;
+        width: 100px;
+        height: 4px;
+        background: var(--gradient-vet);
+        margin: 15px auto;
+        border-radius: 2px;
+    }
+
+    .services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 30px;
+        margin-bottom: 60px;
+    }
+
+    .service-card {
+        background: white;
+        padding: 40px 30px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        text-align: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .service-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+    }
+
+    .service-icon {
+        font-size: 4rem;
+        margin-bottom: 20px;
+        background: var(--gradient-vet);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .service-card h3 {
+        font-size: 1.5rem;
+        color: var(--dark-color);
+        margin-bottom: 15px;
+    }
+
+    .service-card p {
+        color: #666;
+        line-height: 1.6;
+    }
+
+    .cta-section {
+        background: var(--gradient-vet);
+        color: white;
+        padding: 60px 40px;
+        border-radius: 20px;
+        text-align: center;
+        margin: 60px 0;
+    }
+
+    .cta-section h2 {
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+        font-family: 'Pacifico', cursive;
+    }
+
+    .cta-section p {
+        font-size: 1.2rem;
+        margin-bottom: 30px;
+        opacity: 0.9;
+    }
+
+    .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+        margin: 60px 0;
+    }
+
+    .feature-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+        padding: 20px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+
+    .feature-icon {
+        font-size: 2.5rem;
+        color: var(--primary-color);
+        min-width: 60px;
+    }
+
+    .feature-content h4 {
+        font-size: 1.2rem;
+        color: var(--dark-color);
+        margin-bottom: 10px;
+    }
+
+    .feature-content p {
+        color: #666;
+        line-height: 1.6;
+    }
+
+    @media (max-width: 768px) {
+        .hero h1 {
+            font-size: 2rem;
+        }
+
+        .hero p {
+            font-size: 1rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+        }
+
+        .cta-section h2 {
+            font-size: 1.8rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block contenido %}
+<div class="hero">
+    <h1>🐾 Bienvenidos a VetCare 🐾</h1>
+    <p>Tu clínica veterinaria de confianza. Cuidamos a tus mascotas como si fueran nuestras</p>
+    <div class="hero-image">
+        <img src="{% static 'img/logo.png' %}" alt="Logo VetCare"/>
+    </div>
+    <a href="#servicios" class="btn btn-primary">Conoce Nuestros Servicios</a>
+</div>
+
+<section class="services" id="servicios">
+    <h2 class="section-title">Nuestros Servicios</h2>
+    
+    <div class="services-grid">
+        <div class="service-card">
+            <div class="service-icon">
+                <i class="fas fa-stethoscope"></i>
+            </div>
+            <h3>Consultas Generales</h3>
+            <p>Atención médica integral para todas las razas y especies. Diagnóstico profesional y tratamiento personalizado.</p>
+        </div>
+
+        <div class="service-card">
+            <div class="service-icon">
+                <i class="fas fa-syringe"></i>
+            </div>
+            <h3>Vacunación</h3>
+            <p>Programa completo de vacunación para proteger la salud de tu mascota contra enfermedades.</p>
+        </div>
+
+        <div class="service-card">
+            <div class="service-icon">
+                <i class="fas fa-x-ray"></i>
+            </div>
+            <h3>Radiología</h3>
+            <p>Tecnología de punta para diagnósticos precisos y tratamientos efectivos.</p>
+        </div>
+
+        <div class="service-card">
+            <div class="service-icon">
+                <i class="fas fa-cut"></i>
+            </div>
+            <h3>Cirugías</h3>
+            <p>Quirófano equipado con tecnología moderna y equipo médico altamente capacitado.</p>
+        </div>
+
+        <div class="service-card">
+            <div class="service-icon">
+                <i class="fas fa-spa"></i>
+            </div>
+            <h3>Estética y Baño</h3>
+            <p>Servicios de grooming profesional para que tu mascota luzca radiante y saludable.</p>
+        </div>
+
+        <div class="service-card">
+            <div class="service-icon">
+                <i class="fas fa-bed"></i>
+            </div>
+            <h3>Hospitalización</h3>
+            <p>Instalaciones cómodas y seguras para el cuidado y recuperación de tu mascota.</p>
+        </div>
+    </div>
+</section>
+
+<section class="features">
+    <div class="feature-item">
+        <div class="feature-icon">
+            <i class="fas fa-clock"></i>
+        </div>
+        <div class="feature-content">
+            <h4>Horario Extendido</h4>
+            <p>Disponibles de lunes a sábado de 8:00 AM a 8:00 PM</p>
+        </div>
+    </div>
+
+    <div class="feature-item">
+        <div class="feature-icon">
+            <i class="fas fa-ambulance"></i>
+        </div>
+        <div class="feature-content">
+            <h4>Urgencias 24/7</h4>
+            <p>Servicio de emergencias disponible las 24 horas</p>
+        </div>
+    </div>
+
+    <div class="feature-item">
+        <div class="feature-icon">
+            <i class="fas fa-user-md"></i>
+        </div>
+        <div class="feature-content">
+            <h4>Personal Certificado</h4>
+            <p>Veterinarios con amplia experiencia y certificaciones</p>
+        </div>
+    </div>
+
+    <div class="feature-item">
+        <div class="feature-icon">
+            <i class="fas fa-heart"></i>
+        </div>
+        <div class="feature-content">
+            <h4>Amor por los Animales</h4>
+            <p>Tratamos a cada mascota con cariño y dedicación</p>
+        </div>
+    </div>
+</section>
+
+<div class="cta-section" id="contacto">
+    <h2>¿Listo para cuidar de tu mascota?</h2>
+    <p>Agenda tu cita hoy y dale a tu mejor amigo el cuidado que merece</p>
+    <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+        <a href="tel:+527701267278" class="btn btn-primary">
+            <i class="fas fa-phone"></i> Llamar Ahora
+        </a>
+        <a href="https://wa.me/527701267278" class="btn btn-secondary" target="_blank">
+            <i class="fab fa-whatsapp"></i> WhatsApp
+        </a>
+    </div>
+</div>
 {% endblock %}
