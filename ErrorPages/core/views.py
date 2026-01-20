@@ -10,3 +10,6 @@ def contacto(request):
 
 def onepage(request):
     return render(request, "core/onepage.html")
+
+def cvjona(request):
+    return render(request, "core/cvjona.html")

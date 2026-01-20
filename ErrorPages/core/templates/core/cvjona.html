@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV - Jonathan Alberto Barrera Calderón</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 5px solid white;
+            margin-bottom: 20px;
+            object-fit: cover;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1em;
+        }
+
+        .contact-item img {
+            width: 24px;
+            height: 24px;
+            filter: brightness(0) invert(1);
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 40px;
+            padding: 40px;
+        }
+
+        .sidebar {
+            border-right: 2px solid #e0e0e0;
+            padding-right: 40px;
+        }
+
+        .main-content {
+            padding-left: 20px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            color: #2a5298;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .skill-category {
+            margin-bottom: 25px;
+        }
+
+        .skill-category h3 {
+            color: #1e3c72;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .skills-list {
+            list-style: none;
+        }
+
+        .skills-list li {
+            padding: 8px 0;
+            padding-left: 20px;
+            position: relative;
+            color: #555;
+        }
+
+        .skills-list li:before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .tech-icons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .tech-icons img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            transition: transform 0.3s;
+        }
+
+        .tech-icons img:hover {
+            transform: scale(1.2);
+        }
+
+        .education-item, .experience-item {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .education-item h3, .experience-item h3 {
+            color: #1e3c72;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .institution, .company {
+            color: #555;
+            font-style: italic;
+            margin-bottom: 5px;
+        }
+
+        .date {
+            color: #888;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .experience-item ul {
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+
+        .experience-item li {
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        .about-text {
+            color: #555;
+            line-height: 1.8;
+            font-size: 1.1em;
+            text-align: justify;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                border-right: none;
+                border-bottom: 2px solid #e0e0e0;
+                padding-right: 0;
+                padding-bottom: 40px;
+            }
+
+            .main-content {
+                padding-left: 0;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .contact-info {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="https://ui-avatars.com/api/?name=Jonathan+Barrera&size=150&background=667eea&color=fff&bold=true" alt="Jonathan Barrera" class="profile-img">
+            <h1>Jonathan Alberto Barrera Calderón</h1>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" alt="GitHub">
+                    <a href="https://github.com/JonathanAlbertoBarrera" style="color: white; text-decoration: none;">JonathanAlbertoBarrera</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="sidebar">
+                <div class="section">
+                    <h2 class="section-title">Sobre Mí</h2>
+                    <p class="about-text">
+                        Estudiante de últimos cuatrimestres de Ingeniería en Desarrollo y Gestión de Software en la Universidad Tecnológica Emiliano Zapata. Apasionado por el desarrollo de software con experiencia en tecnologías backend y frontend modernas.
+                    </p>
+                </div>
+
+                <div class="section">
+                    <h2 class="section-title">Habilidades</h2>
+                    
+                    <div class="skill-category">
+                        <h3>Stack Orientado Backend</h3>
+                        <ul class="skills-list">
+                            <li>Java (Jakarta EE)</li>
+                            <li>Nest.js</li>
+                            <li>SQL</li>
+                            <li>MongoDB</li>
+                        </ul>
+                        <div class="tech-icons">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" alt="Java">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg" alt="Spring">
+                            <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/nestjs/nestjs-original.svg" alt="NestJS" style="background: white; padding: 5px; border-radius: 5px;">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" alt="MongoDB">
+                        </div>
+                    </div>
+
+                    <div class="skill-category">
+                        <h3>Stack Orientado Frontend</h3>
+                        <ul class="skills-list">
+                            <li>React</li>
+                            <li>React Native</li>
+                            <li>Next.js</li>
+                            <li>JavaScript</li>
+                            <li>HTML</li>
+                            <li>CSS</li>
+                            <li>Bootstrap</li>
+                        </ul>
+                        <div class="tech-icons">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg" alt="NextJS">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" alt="Bootstrap">
+                        </div>
+                    </div>
+
+                    <div class="skill-category">
+                        <h3>Otras</h3>
+                        <ul class="skills-list">
+                            <li>Fundamentos de IOT</li>
+                            <li>Servicios AWS (EC2, RDS, S3)</li>
+                            <li>Docker</li>
+                            <li>Excel</li>
+                            <li>JUnit5</li>
+                        </ul>
+                        <div class="tech-icons">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" alt="AWS">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="Docker">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="main-content">
+                <div class="section">
+                    <h2 class="section-title">Experiencia Laboral</h2>
+                    
+                    <div class="experience-item">
+                        <h3>Nuevo Sistema de Activos Gubernamentales - Morelos</h3>
+                        <p class="company">Agencia de Transformación Digital de Morelos - Centro de Desarrollo de Software (UTEZ)</p>
+                        <p class="date">Octubre 2025 - Actual</p>
+                        <ul>
+                            <li>Desarrollo backend Nest.JS</li>
+                            <li>Desarrollo Frontend Next.JS</li>
+                            <li>Sistema ABAC (Attribute-Based Access Control)</li>
+                            <li>Desarrollo de conceptos contables-gubernamentales</li>
+                        </ul>
+                        <div class="tech-icons">
+                            <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/nestjs/nestjs-original.svg" alt="NestJS" style="background: white; padding: 5px; border-radius: 5px;">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg" alt="NextJS">
+                        </div>
+                    </div>
+
+                    <div class="experience-item">
+                        <h3>Sistema de gestión de citas para servicios escolares</h3>
+                        <p class="company">Centro de Desarrollo de Software (UTEZ), Morelos</p>
+                        <p class="date">Mayo 2025 - Septiembre 2025</p>
+                        <ul>
+                            <li>Desarrollo backend Spring Boot</li>
+                            <li>Módulos para el manejo de logística, como horarios y excepciones de atención</li>
+                            <li>Implementación de Spring Security</li>
+                            <li>Consumo en aplicación web con React</li>
+                            <li>Implementación de bitácora para auditoría</li>
+                        </ul>
+                        <div class="tech-icons">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg" alt="Spring Boot">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React">
+                        </div>
+                    </div>
+
+                    <div class="experience-item">
+                        <h3>Sistema de gestión Liga de Fútbol</h3>
+                        <p class="company">Universidad Tecnológica Emiliano Zapata (UTEZ), Morelos</p>
+                        <p class="date">Enero 2025 - Abril 2025</p>
+                        <ul>
+                            <li>Desarrollo backend Spring Boot</li>
+                            <li>Implementación de Spring Security</li>
+                            <li>Consumo en aplicación web con React</li>
+                            <li>Consumo en aplicación móvil con React Native</li>
+                            <li>Líder del proyecto</li>
+                        </ul>
+                        <div class="tech-icons">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg" alt="Spring Boot">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React">
+                        </div>
+                    </div>
+
+                    <div class="experience-item">
+                        <h3>Sistema de órdenes de cafetería</h3>
+                        <p class="company">Universidad Tecnológica Emiliano Zapata (UTEZ), Morelos</p>
+                        <p class="date">Mayo 2024 - Agosto 2024</p>
+                        <ul>
+                            <li>Java Servlets y jsp</li>
+                            <li>Backend JAVA</li>
+                            <li>Despliegue en AWS</li>
+                            <li>Líder del proyecto</li>
+                        </ul>
+                        <div class="tech-icons">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" alt="Java">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript">
+                        </div>
+                    </div>
+
+                    <div class="experience-item">
+                        <h3>Sistemas de Verificación MOR, S.A. de C.V.</h3>
+                        <p class="company">Alpuyeca, Morelos</p>
+                        <p class="date">Junio 2022 - Junio 2023</p>
+                        <ul>
+                            <li>Automatización de proceso de gestión de registro de verificaciones físico - mecánicas, usando macros hechas en Visual Basic (VBA)</li>
+                        </ul>
+                        <div class="tech-icons">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/microsoftsqlserver/microsoftsqlserver-plain.svg" alt="Excel">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2 class="section-title">Formación Académica</h2>
+                    
+                    <div class="education-item">
+                        <h3>Ingeniería en Desarrollo y Gestión de Software</h3>
+                        <p class="institution">Universidad Tecnológica Emiliano Zapata (UTEZ)</p>
+                        <p class="date">2025 - ACTUAL (EN CURSO)</p>
+                    </div>
+
+                    <div class="education-item">
+                        <h3>TSU: Desarrollo de Software Multiplataforma</h3>
+                        <p class="institution">Universidad Tecnológica Emiliano Zapata (UTEZ)</p>
+                        <p class="date">2023 - 2025</p>
+                    </div>
+
+                    <div class="education-item">
+                        <h3>Carrera Profesional Técnico Bachiller en Informática</h3>
+                        <p class="institution">Conalep Temixco</p>
+                        <p class="date">2019 - 2022</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
