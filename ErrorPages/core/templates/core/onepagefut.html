@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block titulo %}Equipos de Fútbol - Champions League{% endblock %}
+
+{% block container_class %}container-fluid{% endblock %}
+
+{% block contenido %}
+<link rel="stylesheet" href="{% static 'css/equipos.css' %}">
+
+<div class="py-4">
+    <h1 class="text-center mb-2 text-white">Equipos de la Champions League</h1>
+    <p class="text-center text-light mb-5">Desplázate hacia abajo para cargar más equipos</p>
+    
+    <div id="cards-container" class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+        <!-- Las cards se cargaran dinamicamente aquí -->
+    </div>
+    
+    <div id="max-reached" class="text-center my-4" style="display: none;">
+        <p class="text-warning fw-bold">¡Has alcanzado el límite de 100 tarjetas!</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Pasar rutas imagenes desde Django al JavaScript -->
+<script>
+    const imagenesRutas = [
+        "{% static 'img/1barsita.jpg' %}",
+        "{% static 'img/2realtrampas.jpg' %}",
+        "{% static 'img/3bayern.png' %}",
+        "{% static 'img/4milan.png' %}",
+        "{% static 'img/5juventus.png' %}",
+        "{% static 'img/6psg.jpg' %}",
+        "{% static 'img/7manu.jpg' %}",
+        "{% static 'img/8mancity.png' %}",
+        "{% static 'img/9liverpool.png' %}",
+        "{% static 'img/10chelsea.png' %}"
+    ];
+</script>
+<script src="{% static 'js/cards.js' %}"></script>
+{% endblock %}

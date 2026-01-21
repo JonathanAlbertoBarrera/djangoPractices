@@ -1,27 +1,62 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" style="height: 100%;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> {% block titulo %} X {% endblock%} </title>
-    <style>
-        body{
-            background-color: black;
-            color: white;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 50px;
-        }
-        h1{
-            font-size: 48px;
-            color: #ff6b6b;
-        }
-    </style>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/champions.css' %}">
+    
+    <title>{% block titulo %}Champions League{% endblock %}</title>
 </head>
-<body>
-    {% block contenido %}
-    {% endblock %}
-    {% block mensaje %}
+<body style="min-height: 100%; display: flex; flex-direction: column;">
+
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'index' %}">
+                {% block navbar_imagen %}
+                Champions League
+                {% endblock %}
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    {% with url_actual=request.resolver_match.url_name %}
+
+                    <li class="nav-item">
+                        <a class="nav-link {% if url_actual == 'index' %}active{% endif %}" href="{% url 'index' %}">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if url_actual == 'equipos' %}active{% endif %}" href="{% url 'equipos' %}">Equipos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if url_actual == 'contacto' %}active{% endif %}" href="{% url 'contacto' %}">Contacto</a>
+                    </li>
+                    {% endwith %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="{% block container_class %}container{% endblock %} mt-4" style="flex: 1;">
+        {% block contenido %}
+        {% endblock %}
+    </div>
+
+    <footer class="bg-dark text-light text-center text-lg-start mt-auto">
+        <div class="text-center p-3" style="background-color: rgba(0, 212, 255, 0.1); border-top: 2px solid #00d4ff;">
+            © 2026 Copyright:
+            <a class="text-info" href="https://www.uefa.com/" target="_blank" >UEFA Champions League</a> - Proyecto Educativo
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {% block extra_js %}
     {% endblock %}
 </body>
 </html>

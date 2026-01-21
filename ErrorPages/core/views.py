@@ -13,3 +13,6 @@ def onepage(request):
 
 def cvjona(request):
     return render(request, "core/cvjona.html")
+
+def onepagefut(request):
+    return render(request, "core/onepagefut.html")

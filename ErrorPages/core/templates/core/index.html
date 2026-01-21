@@ -1,11 +1,18 @@
 {% extends "base.html" %}
 {% load static %}
-{% block titulo %} Página Principal {% endblock %}
 
-{% block contenido %} 
+{% block titulo %}UEFA Champions League - Inicio{% endblock %}
 
-<h1> Bienvenido a la Página Principal </h1>
+{% block container_class %}container-fluid p-0{% endblock %}
 
-<img src="{% static 'img/logo.jpg'  %}"  alt="Logo de la Página"/>
+{% block contenido %}
 
+<div class="champions-header">
+    <h1 class="champions-title">UEFA Champions League</h1>
+    <p class="champions-subtitle">La Competición Más Prestigiosa de Europa</p>
+</div>
+
+<div class="logo-container">
+    <img src="{% static 'img/champions.png' %}" alt="Logo de la Champions League"/>
+</div>
 {% endblock %}

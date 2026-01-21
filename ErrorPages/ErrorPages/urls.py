@@ -7,4 +7,5 @@ urlpatterns = [
     path('contacto/', core.contacto, name='contacto'),
     path('onepage/', core.onepage, name='onepage'),
     path('cvjona/', core.cvjona, name='cvjona'),
+    path('equipos/', core.onepagefut, name='equipos'),
 ]
