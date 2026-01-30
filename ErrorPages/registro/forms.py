@@ -99,7 +99,6 @@ class RegisterForm(forms.Form):
 
     def clean_rfc(self):
         rfc = self.cleaned_data['rfc']
-        # Primero validar que no tenga minúsculas
         if not re.match(r'^[A-Z]{4}\d{6}[A-Z0-9]{3}$', rfc):
             raise ValidationError("RFC inválido. Debe tener 4 letras MAYÚSCULAS, 6 números, 3 alfanuméricos en mayúsculas. Ejemplo: ABCD990101A12")
         return rfc
