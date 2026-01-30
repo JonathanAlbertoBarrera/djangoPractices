@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Registro UTEZ{% endblock %}
+
+{% block navbar_imagen %}
+        UTEZ
+{% endblock %}
+
+{% block contenido %}
+<div class="container mt-6">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h3 class="mb-0"> Formulario de Registro UTEZ</h3>
+                </div>
+
+                <div class="card-body">
+                    {% if success %}
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="fas fa-check-circle"></i> 
+                        <strong>¡Registro exitoso!</strong> Todos los datos fueron validados correctamente.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    {% endif %}
+
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <!-- Nombre Completo -->
+                        <div class="mb-3">
+                            <label for="{{ form.nombre.id_for_label }}" class="form-label fw-bold">
+                                Nombre Completo *
+                            </label>
+                            {{ form.nombre }}
+                            {% if form.nombre.errors %}
+                                <div class="text-danger mt-1">
+                                    {{ form.nombre.errors }}
+                                </div>
+                            {% endif %}
+                            <small class="form-text text-muted">
+                                Únicamente letras y espacios. Mínimo 10 caracteres.
+                            </small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.matricula.id_for_label }}" class="form-label fw-bold">
+                                Matrícula UTEZ *
+                            </label>
+                            {{ form.matricula }}
+                            {% if form.matricula.errors %}
+                                <div class="text-danger mt-1">
+                                    {{ form.matricula.errors }}
+                                </div>
+                            {% endif %}
+                            <small class="form-text text-muted">
+                                Formato: 5 dígitos, 2 letras, 3 dígitos
+                            </small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.email.id_for_label }}" class="form-label fw-bold">
+                                Correo Institucional *
+                            </label>
+                            {{ form.email }}
+                            {% if form.email.errors %}
+                                <div class="text-danger mt-1">
+                                    {{ form.email.errors }}
+                                </div>
+                            {% endif %}
+                            <small class="form-text text-muted">
+                                Debe terminar en @utez.edu.mx
+                            </small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.telefono.id_for_label }}" class="form-label fw-bold">
+                               Teléfono Móvil *
+                            </label>
+                            {{ form.telefono }}
+                            {% if form.telefono.errors %}
+                                <div class="text-danger mt-1">
+                                    {{ form.telefono.errors }}
+                                </div>
+                            {% endif %}
+                            <small class="form-text text-muted">
+                                Exactamente 10 dígitos sin espacios ni guiones
+                            </small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.rfc.id_for_label }}" class="form-label fw-bold">
+                                <i class="fas fa-file-alt"></i> RFC *
+                            </label>
+                            {{ form.rfc }}
+                            {% if form.rfc.errors %}
+                                <div class="text-danger mt-1">
+                                    {{ form.rfc.errors }}
+                                </div>
+                            {% endif %}
+                            <small class="form-text text-muted">
+                                4 letras, 6 números, 3 alfanuméricos. Mayúsculas obligatorias
+                            </small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.password.id_for_label }}" class="form-label fw-bold">
+                                <i class="fas fa-lock"></i> Contraseña *
+                            </label>
+                            {{ form.password }}
+                            {% if form.password.errors %}
+                                <div class="text-danger mt-1">
+                                    {{ form.password.errors }}
+                                </div>
+                            {% endif %}
+                            <small class="form-text text-muted">
+                                Mínimo 8 caracteres, con al menos una mayúscula, una minúscula, un número y algún símbolo de los siguientes: (@$!%*?&)
+                            </small>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success">
+                                Registrarse
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+
+{% endblock %}
+
+{% block textofooter %}
+            © 2026 Copyright: UTEZ
+{% endblock %}
