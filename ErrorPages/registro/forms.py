@@ -61,8 +61,7 @@ class RegisterForm(forms.Form):
 
     password = forms.CharField(
         required=True,
-        min_length=8,
-        widget=forms.PasswordInput(attrs={
+        widget=forms.PasswordInput(render_value=True, attrs={
             'class': 'form-control',
             'placeholder': 'Contraseña segura',
             'pattern': r'(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}',
@@ -74,8 +73,10 @@ class RegisterForm(forms.Form):
     # Validaciones Backend
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
-        if not re.match(r'^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]{10,}$', nombre):
-            raise ValidationError("Solo letras y espacios. Sin números ni símbolos. Mínimo 10 caracteres.")
+        if len(nombre) < 10:
+            raise ValidationError("El nombre debe tener al menos 10 caracteres.")
+        if not re.match(r'^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$', nombre):
+            raise ValidationError("Solo letras y espacios. Sin números ni símbolos.")
         return nombre
 
     def clean_matricula(self):
@@ -98,17 +99,13 @@ class RegisterForm(forms.Form):
 
     def clean_rfc(self):
         rfc = self.cleaned_data['rfc']
-        # Convertir a mayúsculas automáticamente
-        rfc = rfc.upper()
+        # Primero validar que no tenga minúsculas
         if not re.match(r'^[A-Z]{4}\d{6}[A-Z0-9]{3}$', rfc):
-            raise ValidationError("RFC inválido. Formato: 4 letras, 6 números, 3 alfanuméricos (mayúsculas).")
+            raise ValidationError("RFC inválido. Debe tener 4 letras MAYÚSCULAS, 6 números, 3 alfanuméricos en mayúsculas. Ejemplo: ABCD990101A12")
         return rfc
 
     def clean_password(self):
         password = self.cleaned_data['password']
-        # Corregido: los lookaheads necesitan .* no solo .
         if not re.match(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$', password):
-            raise ValidationError(
-                "Debe tener mínimo 8 caracteres, al menos una mayúscula, una minúscula, un número y un símbolo (@$!%*?&)."
-            )
+            raise ValidationError("Debe tener mínimo 8 caracteres, al menos una mayúscula, una minúscula, un número y un símbolo (@$!%*?&).")
         return password
