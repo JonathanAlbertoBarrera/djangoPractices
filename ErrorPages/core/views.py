@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from core.models import Contacto
 
 # Create your views here.
 def index(request):
@@ -19,21 +20,26 @@ def onepagefut(request):
 
 from django.shortcuts import render
 from .forms import ContactoForm
+from django.http import JsonResponse
 
 def contacto_view(request):
+    todos= Contacto.objects.all()
     if request.method == 'POST':
         form = ContactoForm(request.POST)
         if form.is_valid():
             # Los datos ya pasaron las validaciones de front y back
-            nombre = form.cleaned_data['nombre']
-            email = form.cleaned_data['email']
-            mensaje = form.cleaned_data['mensaje']
-           
-            print(f"--- NUEVO MENSAJE ---")
-            print(f"Nombre: {nombre}\nEmail: {email}\nMensaje: {mensaje}")
-           
-            return render(request, 'core/formulario.html', {'form': form, 'success': True})
+            form.save()
+            return JsonResponse({
+                'status':'ok',
+                'mensaje':'Registro exitoso!'
+                })
+        else:
+            return JsonResponse({
+                'status':'error',
+                'mensaje': 'algo saloo mal',
+                'errors':form.errors
+            },status=400)
     else:
         form = ContactoForm()
    
-    return render(request, 'core/formulario.html', {'form': form})
+    return render(request, 'core/formulario.html', {'form': form,'contactos':todos})

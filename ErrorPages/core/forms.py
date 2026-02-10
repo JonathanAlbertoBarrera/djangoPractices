@@ -1,8 +1,15 @@
 from django import forms
 from django.core.exceptions import ValidationError
 import re
+from core.models import Contacto
 
-class ContactoForm(forms.Form):
+class ContactoForm(forms.ModelForm):
+
+    class Meta:
+        model=Contacto
+        fields=['nombre','apellidos','edad','email','mensaje']
+        
+    """
     nombre = forms.CharField(
         min_length = 3,
         widget= forms.TextInput(attrs={'class': 'form-control', 'placeholder' : 'Tu nombre','pattern' : '[a-zA-ZáéíóúÁÉÍÓÚ ]+','title':'Ingresa sólo letras'})
@@ -13,6 +20,7 @@ class ContactoForm(forms.Form):
     mensaje = forms.CharField(
         widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3})
     )
+    """
 
     # Validación de Backend
     def clean_mensaje(self):

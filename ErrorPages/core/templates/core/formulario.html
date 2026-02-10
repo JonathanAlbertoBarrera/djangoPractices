@@ -6,7 +6,7 @@
 <br>
 <p>Rellena el formulario</p>
 
-<form method="post" novalidate> {% csrf_token %}
+<form id="formulario" method="post" novalidate> {% csrf_token %}
    
     {% for field in form %}
         <div class="mb-3">
@@ -23,8 +23,48 @@
     <button type="submit">Enviar</button>
 </form>
 
+<div id="mensaje"></div>
+
 {% if success %}
     <p style="color: green;">¡Datos impresos en consola correctamente!</p>
 {% endif %}
 
+
+<ul>
+<h1>Contactos registrados</h1>
+{% for contacto in contactos %}
+<li>{{ contacto.nombre }}</li>
+{% empty %}
+<p>No hay datos</p>
+{% endfor %}
+</ul>
+
+<script>
+    const form=document.getElementById('formulario');
+    const mensaje=document.getElementById('mensaje');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();//NO MANDES EL FORMULARIO
+        const formData=new FormData(form);
+
+        try { //podemos hacer validaciones especializadas en front
+            const response=await fetch("",{
+                method:"POST",
+                body:formData,
+                headers:{
+                    "X-Requested-With":"XMLHttpRequest",
+                }
+            });
+            const data=await response.json();
+            if(data.status === "ok"){
+                mensaje.innerHTML=`<p style="color:green;">${data.mensaje}</p>`;
+                form.reset();
+            }else{
+                mensaje.innerHTML=`<p style="color:red;">${JSON.stringify(data.errors)}</p>`;
+            }
+        } catch (error) {
+            console.error('Error',error);
+        }
+    });
+</script>
 {% endblock%}
