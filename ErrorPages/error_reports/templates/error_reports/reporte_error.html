@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block titulo %}Reportes de error{% endblock %}
+
+{% block contenido %}
+<div class="row g-4 text-light">
+    <div class="col-12 col-lg-5">
+        <h1 class="h3 mb-3">Reporte de error</h1>
+        <p class="opacity-75">Captura un reporte y valida en backend.</p>
+
+        <form id="reporte-form" method="post" novalidate>
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="mb-3">
+                    <label class="form-label text-light">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <div class="text-danger small">{{ field.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary w-100">Enviar</button>
+        </form>
+
+        <div id="mensaje" class="mt-3"></div>
+        <div id="errores" class="mt-2"></div>
+    </div>
+
+    <div class="col-12 col-lg-7">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <h2 class="h4 mb-0">Reportes registrados</h2>
+            <button id="refrescar" class="btn btn-outline-secondary btn-sm" type="button">Refrescar</button>
+        </div>
+        <div id="reportes-lista" class="d-grid gap-3"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const form = document.getElementById("reporte-form");
+    const mensaje = document.getElementById("mensaje");
+    const errores = document.getElementById("errores");
+    const lista = document.getElementById("reportes-lista");
+    const refrescar = document.getElementById("refrescar");
+
+    const renderReportes = (items) => {
+        if (!items || items.length === 0) {
+            lista.innerHTML = "<div class=\"alert alert-info\">No hay reportes.</div>";
+            return;
+        }
+
+        lista.innerHTML = items.map((item) => {
+            const tipo = (item.tipo_error || "").toString();
+            let colorClass = "border-secondary";
+            if (tipo.startsWith("4")) {
+                colorClass = "bg-warning-subtle border-warning";
+            } else if (tipo.startsWith("5")) {
+                colorClass = "bg-danger-subtle border-danger";
+            }
+
+            const fecha = item.fecha_reporte ? new Date(item.fecha_reporte).toLocaleString() : "";
+            const ip = item.ip_cliente || "-";
+            const metodo = item.metodo_http || "";
+
+            return `
+                <div class="card border ${colorClass}">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <h5 class="card-title mb-1">${item.titulo}</h5>
+                            <span class="badge text-bg-dark">${tipo}</span>
+                        </div>
+                        <p class="card-text mb-2">${item.descripcion}</p>
+                        <div class="small text-muted">${metodo} ${item.url}</div>
+                        <div class="small text-muted">IP: ${ip}</div>
+                        <div class="small text-muted">${fecha}</div>
+                    </div>
+                </div>
+            `;
+        }).join("");
+    };
+
+    const cargarReportes = async () => {
+        try {
+            const response = await fetch("{% url 'obtener_reportes' %}");
+            const data = await response.json();
+            renderReportes(data);
+        } catch (error) {
+            lista.innerHTML = "<div class=\"alert alert-danger\">Error cargando reportes.</div>";
+        }
+    };
+
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        mensaje.innerHTML = "";
+        errores.innerHTML = "";
+
+        const formData = new FormData(form);
+        try {
+            const response = await fetch("", {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
+            });
+            const data = await response.json();
+            if (data.status === "ok") {
+                mensaje.innerHTML = "<div class=\"alert alert-success\">" + data.mensaje + "</div>";
+                form.reset();
+                await cargarReportes();
+            } else {
+                mensaje.innerHTML = "<div class=\"alert alert-danger\">" + data.mensaje + "</div>";
+                errores.innerHTML = "<pre class=\"text-danger small\">" + JSON.stringify(data.errors, null, 2) + "</pre>";
+            }
+        } catch (error) {
+            mensaje.innerHTML = "<div class=\"alert alert-danger\">Error enviando formulario.</div>";
+        }
+    });
+
+    refrescar.addEventListener("click", cargarReportes);
+    cargarReportes();
+</script>
+{% endblock %}

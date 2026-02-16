@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'registro',
+    'error_reports'
 ]
 
 MIDDLEWARE = [
