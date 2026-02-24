@@ -43,3 +43,29 @@ def contacto_view(request):
         form = ContactoForm()
    
     return render(request, 'core/formulario.html', {'form': form,'contactos':todos})
+
+def get_contactos(request):
+    if request.method == "GET":
+        todos = list(Contacto.objects.values())
+        return JsonResponse(todos, safe=False)
+    else:
+        return JsonResponse({'mensaje': 'oye esto solo acepta GET'})
+     
+def register_contacto(request):
+    if request.method == 'POST':
+        form = ContactoForm(request.POST)
+        if form.is_valid():
+            # Los datos ya pasaron las validaciones de front y back
+            form.save()
+            return JsonResponse({
+                'status': 'ok',
+                'mensaje': 'Registro exitoso!'
+            })
+        else:
+            return JsonResponse({
+                'status': 'error',
+                'mensaje': 'algo salio mal',
+                'errors': form.errors
+            }, status=400)
+    else:
+        return JsonResponse({'mensaje': 'oye esto solo acepta POST'})

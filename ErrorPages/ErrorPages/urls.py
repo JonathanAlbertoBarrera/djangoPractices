@@ -14,4 +14,6 @@ urlpatterns = [
     path('registro/', registro.registro_view, name='registro'),
     path('obtener-reportes/', error_reports.obtener_reportes_view, name='obtener_reportes'),
     path('reportes-error/', error_reports.reporte_error_view, name='reportes_error'),
+    path('core/get-contactos/', core.get_contactos, name='get_contactos'),
+    path('core/register-contacto/', core.register_contacto, name='register_contacto'),
 ]
