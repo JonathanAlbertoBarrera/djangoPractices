@@ -26,8 +26,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'registro',
+    'rest_framework',
     'error_reports',
-    'apiLibrosJona'
+    'apiLibrosJona',
+    'apiLibrosRestFrame',
 ]
 
 MIDDLEWARE = [
@@ -67,10 +69,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'api_libro',
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',
-        'PORT': ''
+        'USER': 'jonadjango',
+        'PASSWORD': 'jona123',
+        'HOST': 'localhost',
+        'PORT': '3306'
     }
 }
 

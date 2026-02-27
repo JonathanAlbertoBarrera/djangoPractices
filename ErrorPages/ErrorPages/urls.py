@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path,include
 from core import views as core
 from error_reports import views as error_reports
 from registro import views as registro
@@ -21,4 +21,5 @@ urlpatterns = [
     path('libros/nuevo/', libro.api_crear_libro, name='crear_libro'),
     path('libros/editar/<int:pk>', libro.api_editar_libro, name='editar_libro'),
     path('libros/eliminar/<int:pk>', libro.api_eliminar_libro, name='eliminar_libro'),
+    path('', include('apiLibrosRestFrame.urls')),
 ]
