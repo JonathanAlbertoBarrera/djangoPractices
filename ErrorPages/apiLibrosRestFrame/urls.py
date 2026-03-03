@@ -7,6 +7,6 @@ router = DefaultRouter()
 router.register(r'libros', LibroViewSet, basename='libro')
 
 urlpatterns = [
-    # Incluimos todas las rutas generadas por el router bajo el prefijo 'api/'
-    path('api/', include(router.urls)), 
+    # Incluimos todas las rutas generadas por el router
+    path('', include(router.urls)), 
 ]

@@ -6,7 +6,8 @@ from registro import views as registro
 from apiLibrosJona import views as libro
 
 urlpatterns = [
-    path('', core.index, name='index'),
+    path('admin/', admin.site.urls),
+    path('api/', include('apiLibrosRestFrame.urls')),
     path('contacto/', core.contacto, name='contacto'),
     path('onepage/', core.onepage, name='onepage'),
     path('cvjona/', core.cvjona, name='cvjona'),
@@ -17,9 +18,9 @@ urlpatterns = [
     path('reportes-error/', error_reports.reporte_error_view, name='reportes_error'),
     path('core/get-contactos/', core.get_contactos, name='get_contactos'),
     path('core/register-contacto/', core.register_contacto, name='register_contacto'),
-    path('libros/', libro.api_lista_libros, name='lista_libros'),
-    path('libros/nuevo/', libro.api_crear_libro, name='crear_libro'),
-    path('libros/editar/<int:pk>', libro.api_editar_libro, name='editar_libro'),
-    path('libros/eliminar/<int:pk>', libro.api_eliminar_libro, name='eliminar_libro'),
-    path('', include('apiLibrosRestFrame.urls')),
+    path('librosn/', libro.api_lista_libros, name='lista_libros'),
+    path('librosn/nuevo/', libro.api_crear_libro, name='crear_libro'),
+    path('librosn/editar/<int:pk>', libro.api_editar_libro, name='editar_libro'),
+    path('librosn/eliminar/<int:pk>', libro.api_eliminar_libro, name='eliminar_libro'),
+    path('', core.index, name='index'),
 ]
