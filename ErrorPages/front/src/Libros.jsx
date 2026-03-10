@@ -6,7 +6,19 @@ import toast, { Toaster } from 'react-hot-toast';
 
 export default function LibrosApp() {
     const [libros, setLibros] = useState([]);
-    const [formData, setFormData] = useState({ titulo: '', autor: '', isbn: '', paginas: '', editorial: '' });
+
+    // Estado inicial centralizado para limpiar fácilmente el formulario
+    const estadoInicial = {
+        titulo: '',
+        autor: '',
+        isbn: '',
+        paginas: '',
+        editorial: '',
+        foto: null,
+        foto_para_binario: null,
+    };
+
+    const [formData, setFormData] = useState(estadoInicial);
     const [editandoId, setEditandoId] = useState(null);
     const [filtro, setFiltro] = useState('');
     const [cargandoTabla, setCargandoTabla] = useState(false);
@@ -31,43 +43,68 @@ export default function LibrosApp() {
     };
 
     const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        });
+        // Si el input es un archivo, guardamos el objeto File en lugar del string
+        if (e.target.type === 'file') {
+            setFormData({
+                ...formData,
+                [e.target.name]: e.target.files[0],
+            });
+        } else {
+            setFormData({
+                ...formData,
+                [e.target.name]: e.target.value,
+            });
+        }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setCargandoGuardar(true);
-    setErroresBackend({});
+        setErroresBackend({});
 
         await new Promise(resolve => setTimeout(resolve, 500)); 
 
+        // Empaquetamos todo en FormData porque estamos enviando archivos
+        const dataToSend = new FormData();
+        dataToSend.append('titulo', formData.titulo);
+        dataToSend.append('autor', formData.autor);
+        dataToSend.append('isbn', formData.isbn);
+        dataToSend.append('paginas', formData.paginas);
+        dataToSend.append('editorial', formData.editorial);
+
+        // Solo enviamos las fotos si el usuario seleccionó un archivo nuevo
+        if (formData.foto instanceof File) {
+            dataToSend.append('foto', formData.foto);
+        }
+        if (formData.foto_para_binario instanceof File) {
+            dataToSend.append('foto_para_binario', formData.foto_para_binario);
+        }
+
         try {
             if (editandoId) {
-                await update(editandoId, formData);
+                await update(editandoId, dataToSend);
                 toast.success("Libro actualizado correctamente");
             } else {
-                await create(formData);
+                await create(dataToSend);
                 toast.success("Libro registrado exitosamente");
             }
 
-            setFormData({ titulo: '', autor: '', isbn: '', paginas: '', editorial: '' });
+            setFormData(estadoInicial);
             setEditandoId(null);
+            // Limpiamos visualmente los inputs de tipo archivo en el DOM
+            document.getElementById('form-libros').reset();
             cargarLibros();
 
         } catch (error) {
             console.error("Error al guardar:", error);
-        
 
-        if (error.response && error.response.data) {
-            setErroresBackend(error.response.data); // Guardamos los errores por campo
-            toast.error("Por favor, corrige los errores en el formulario");
-        } else {
-            toast.error("Hubo un error de conexión con el servidor");
-        }        
-} finally {
+            if (error.response && error.response.data) {
+                setErroresBackend(error.response.data);
+                toast.error("Por favor, corrige los errores en el formulario");
+            } else {
+                toast.error("Hubo un error de conexión con el servidor");
+            }        
+        } finally {
             setCargandoGuardar(false);
         }
     };
@@ -78,7 +115,9 @@ export default function LibrosApp() {
             autor: libro.autor,
             isbn: libro.isbn,
             paginas: libro.paginas,
-            editorial: libro.editorial
+            editorial: libro.editorial,
+            foto: null,
+            foto_para_binario: null,
         });
         setEditandoId(libro.id);
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -137,6 +176,20 @@ export default function LibrosApp() {
         { name: 'Páginas', selector: row => row.paginas, sortable: true },
         { name: 'Editorial', selector: row => row.editorial, sortable: true },
         {
+            name: 'Foto (Media)',
+            cell: row =>
+                row.foto ? (
+                    <img src={row.foto} alt="Carpeta Media" width="50" height="50" style={{ objectFit: 'cover', borderRadius: '5px' }} />
+                ) : "N/A"
+        },
+        {
+            name: 'Foto (Binario)',
+            cell: row =>
+                row.foto_base64_display ? (
+                    <img src={row.foto_base64_display} alt="Base de Datos" width="50" height="50" style={{ objectFit: 'cover', borderRadius: '5px' }} />
+                ) : "N/A"
+        },
+        {
             name: 'Acciones',
             cell: row => (
                 <div className="d-flex gap-2">
@@ -165,7 +218,7 @@ export default function LibrosApp() {
                             <h5 className="mb-0">{editandoId ? 'Editar Libro' : 'Registrar Libro'}</h5>
                         </div>
                         <div className="card-body">
-                            <form onSubmit={handleSubmit}>
+                            <form id="form-libros" onSubmit={handleSubmit}>
                                 <div className="mb-3">
                                     <label className="form-label">Título</label>
                                     <input 
@@ -251,6 +304,40 @@ export default function LibrosApp() {
                                         </div>
                                     )}
                                 </div>
+                                {/* Input para la foto que se guarda en la carpeta media */}
+                                <div className="mb-3">
+                                    <label className="form-label">Foto (Carpeta Media)</label>
+                                    <input
+                                        type="file"
+                                        name="foto"
+                                        accept="image/jpeg"
+                                        className={`form-control ${erroresBackend.foto ? 'is-invalid' : ''}`}
+                                        onChange={handleChange}
+                                        disabled={cargandoGuardar}
+                                    />
+                                    {erroresBackend.foto && (
+                                        <div className="invalid-feedback">
+                                            {erroresBackend.foto.join(', ')}
+                                        </div>
+                                    )}
+                                </div>
+                                {/* Input para la foto que se guarda como bytes en la base de datos */}
+                                <div className="mb-3">
+                                    <label className="form-label">Foto (Base de Datos)</label>
+                                    <input
+                                        type="file"
+                                        name="foto_para_binario"
+                                        accept="image/jpeg"
+                                        className={`form-control ${erroresBackend.foto_para_binario ? 'is-invalid' : ''}`}
+                                        onChange={handleChange}
+                                        disabled={cargandoGuardar}
+                                    />
+                                    {erroresBackend.foto_para_binario && (
+                                        <div className="invalid-feedback">
+                                            {erroresBackend.foto_para_binario.join(', ')}
+                                        </div>
+                                    )}
+                                </div>
                                 <div className="d-grid gap-2">
         <button type="submit" className="btn btn-success" disabled={cargandoGuardar}>
             {cargandoGuardar ? (
@@ -260,7 +347,7 @@ export default function LibrosApp() {
             )}
         </button>
         {editandoId && (
-            <button type="button" className="btn btn-secondary" onClick={() => { setEditandoId(null); setFormData({ titulo: '', autor: '', isbn: '', paginas: '', editorial: '' }); setErroresBackend({}); }} disabled={cargandoGuardar}>
+            <button type="button" className="btn btn-secondary" onClick={() => { setEditandoId(null); setFormData(estadoInicial); setErroresBackend({}); document.getElementById('form-libros').reset(); }} disabled={cargandoGuardar}>
                 Cancelar
             </button>
         )}

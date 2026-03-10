@@ -1,5 +1,7 @@
 from django.contrib import admin
 from django.urls import path,include
+from django.conf import settings
+from django.conf.urls.static import static
 from core import views as core
 from error_reports import views as error_reports
 from registro import views as registro
@@ -24,3 +26,7 @@ urlpatterns = [
     path('librosn/eliminar/<int:pk>', libro.api_eliminar_libro, name='eliminar_libro'),
     path('', core.index, name='index'),
 ]
+
+# Esto permite visualizar las imágenes en modo DEBUG (desarrollo)
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
