@@ -4,7 +4,7 @@ import DataTable from 'react-data-table-component';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import toast, { Toaster } from 'react-hot-toast';
 
-export default function LibrosApp() {
+export default function LibrosApp({ onLogout }) {
     const [libros, setLibros] = useState([]);
 
     // Estado inicial centralizado para limpiar fácilmente el formulario
@@ -58,11 +58,12 @@ export default function LibrosApp() {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        e.preventDefault(); //NO SE RECARGE LA PAGINA, ONEPAGE
         setCargandoGuardar(true);
         setErroresBackend({});
 
-        await new Promise(resolve => setTimeout(resolve, 500)); 
+        // Simulamos un pequeño retraso para ver el estado de carga (opcional)
+        await new Promise((resolve) => setTimeout(resolve, 500));
 
         // Empaquetamos todo en FormData porque estamos enviando archivos
         const dataToSend = new FormData();
@@ -89,21 +90,21 @@ export default function LibrosApp() {
                 toast.success("Libro registrado exitosamente");
             }
 
+            // Limpiamos los inputs de texto en el estado
             setFormData(estadoInicial);
             setEditandoId(null);
             // Limpiamos visualmente los inputs de tipo archivo en el DOM
-            document.getElementById('form-libros').reset();
+            document.getElementById("form-libros").reset();
             cargarLibros();
 
         } catch (error) {
             console.error("Error al guardar:", error);
-
             if (error.response && error.response.data) {
                 setErroresBackend(error.response.data);
                 toast.error("Por favor, corrige los errores en el formulario");
             } else {
                 toast.error("Hubo un error de conexión con el servidor");
-            }        
+            }
         } finally {
             setCargandoGuardar(false);
         }
@@ -116,20 +117,20 @@ export default function LibrosApp() {
             isbn: libro.isbn,
             paginas: libro.paginas,
             editorial: libro.editorial,
-            foto: null,
+            foto: null, // Evitamos cargar archivos viejos, obligamos a subir nuevos si edita
             foto_para_binario: null,
         });
         setEditandoId(libro.id);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
     const handleEliminar = async (id) => {
         if (window.confirm("¿Seguro que deseas eliminar este libro?")) {
-            const toastId = toast.loading("Eliminando libro..."); 
+            const toastId = toast.loading("Eliminando libro...");
             try {
                 await deleteM(id);
                 toast.success("Libro eliminado", { id: toastId });
-                cargarLibros(); 
+                cargarLibros();
             } catch (error) {
                 console.error("Error al eliminar:", error);
                 toast.error("Error al eliminar el libro", { id: toastId });
@@ -138,13 +139,13 @@ export default function LibrosApp() {
     };
 
     const librosFiltrados = libros.filter(
-        libro => 
-            libro.titulo.toLowerCase().includes(filtro.toLowerCase()) || 
-            libro.autor.toLowerCase().includes(filtro.toLowerCase())
+        (libro) =>
+            libro.titulo.toLowerCase().includes(filtro.toLowerCase()) ||
+            libro.autor.toLowerCase().includes(filtro.toLowerCase()),
     );
 
     const barraDeBusqueda = (
-        <div className="input-group mb-3" style={{ maxWidth: '300px' }}>
+        <div className="input-group mb-3" style={{ maxWidth: "300px" }}>
             <input
                 type="text"
                 className="form-control"
@@ -153,7 +154,11 @@ export default function LibrosApp() {
                 onChange={(e) => setFiltro(e.target.value)}
             />
             {filtro && (
-                <button className="btn btn-outline-secondary" type="button" onClick={() => setFiltro('')}>
+                <button
+                    className="btn btn-outline-secondary"
+                    type="button"
+                    onClick={() => setFiltro("")}
+                >
                     ✖
                 </button>
             )}
@@ -170,33 +175,53 @@ export default function LibrosApp() {
     );
 
     const columnas = [
-        { name: 'Título', selector: row => row.titulo, sortable: true },
-        { name: 'Autor', selector: row => row.autor, sortable: true },
-        { name: 'ISBN', selector: row => row.isbn, sortable: true },
-        { name: 'Páginas', selector: row => row.paginas, sortable: true },
-        { name: 'Editorial', selector: row => row.editorial, sortable: true },
+        { name: "Título", selector: (row) => row.titulo, sortable: true },
+        { name: "Autor", selector: (row) => row.autor, sortable: true },
+        { name: "ISBN", selector: (row) => row.isbn, sortable: true },
+        { name: "Páginas", selector: (row) => row.paginas, sortable: true },
+        { name: "Editorial", selector: (row) => row.editorial, sortable: true },
         {
-            name: 'Foto (Media)',
-            cell: row =>
+            name: "Foto (Media)",
+            cell: (row) =>
                 row.foto ? (
-                    <img src={row.foto} alt="Carpeta Media" width="50" height="50" style={{ objectFit: 'cover', borderRadius: '5px' }} />
+                    <img
+                        src={row.foto}
+                        alt="Carpeta Media"
+                        width="50"
+                        height="50"
+                        style={{ objectFit: 'cover', borderRadius: '5px' }}
+                    />
                 ) : "N/A"
         },
         {
-            name: 'Foto (Binario)',
-            cell: row =>
+            name: "Foto (Binario)",
+            cell: (row) =>
                 row.foto_base64_display ? (
-                    <img src={row.foto_base64_display} alt="Base de Datos" width="50" height="50" style={{ objectFit: 'cover', borderRadius: '5px' }} />
+                    <img
+                        src={row.foto_base64_display}
+                        alt="Base de Datos"
+                        width="50"
+                        height="50"
+                        style={{ objectFit: 'cover', borderRadius: '5px' }}
+                    />
                 ) : "N/A"
         },
         {
-            name: 'Acciones',
-            cell: row => (
+            name: "Acciones",
+            cell: (row) => (
                 <div className="d-flex gap-2">
-                    <button className="btn btn-warning btn-sm" onClick={() => prepararEdicion(row)} disabled={cargandoTabla}>
+                    <button
+                        className="btn btn-warning btn-sm"
+                        onClick={() => prepararEdicion(row)}
+                        disabled={cargandoTabla}
+                    >
                         ✏️ Editar
                     </button>
-                    <button className="btn btn-danger btn-sm" onClick={() => handleEliminar(row.id)} disabled={cargandoTabla}>
+                    <button
+                        className="btn btn-danger btn-sm"
+                        onClick={() => handleEliminar(row.id)}
+                        disabled={cargandoTabla}
+                    >
                         🗑️ Eliminar
                     </button>
                 </div>
@@ -209,101 +234,122 @@ export default function LibrosApp() {
 
     return (
         <div className="container mt-5">
-            <Toaster position="top-right" reverseOrder={false} /> 
+            <Toaster position="top-right" reverseOrder={false} />
+
+            <div className="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+                <h2 className="text-primary mb-0">Gestión de Libros</h2>
+                <button
+                    onClick={onLogout}
+                    className="btn btn-outline-danger fw-bold"
+                >
+                    Cerrar Sesión
+                </button>
+            </div>
 
             <div className="row">
                 <div className="col-md-4 mb-4">
                     <div className="card shadow-sm">
                         <div className="card-header bg-primary text-white">
-                            <h5 className="mb-0">{editandoId ? 'Editar Libro' : 'Registrar Libro'}</h5>
+                            <h5 className="mb-0">
+                                {editandoId ? "Editar Libro" : "Registrar Libro"}
+                            </h5>
                         </div>
                         <div className="card-body">
+                            {/* Le agregamos el ID para poder hacer el .reset() en el submit */}
                             <form id="form-libros" onSubmit={handleSubmit}>
                                 <div className="mb-3">
                                     <label className="form-label">Título</label>
-                                    <input 
-                                        type="text" 
-                                        name="titulo" 
-                                        className={`form-control ${erroresBackend.titulo ? 'is-invalid' : ''}`} 
-                                        value={formData.titulo} 
-                                        onChange={handleChange} 
-                                        required 
-                                        disabled={cargandoGuardar} 
+                                    <input
+                                        type="text"
+                                        name="titulo"
+                                        className={`form-control ${erroresBackend.titulo ? "is-invalid" : ""}`}
+                                        value={formData.titulo}
+                                        onChange={handleChange}
+                                        required
+                                        disabled={cargandoGuardar}
                                     />
                                     {erroresBackend.titulo && (
                                         <div className="invalid-feedback">
-                                            {erroresBackend.titulo.join(', ')}
+                                            {erroresBackend.titulo.join(", ")}
                                         </div>
                                     )}
                                 </div>
+
                                 <div className="mb-3">
                                     <label className="form-label">Autor</label>
-                                    <input 
-                                        type="text" 
-                                        name="autor" 
-                                        className={`form-control ${erroresBackend.autor ? 'is-invalid' : ''}`} 
-                                        value={formData.autor} 
-                                        onChange={handleChange} 
-                                        required 
-                                        disabled={cargandoGuardar} 
+                                    <input
+                                        type="text"
+                                        name="autor"
+                                        placeholder="Ej. Gabriel García Márquez"
+                                        className={`form-control ${erroresBackend.autor ? "is-invalid" : ""}`}
+                                        value={formData.autor}
+                                        onChange={handleChange}
+                                        required
+                                        disabled={cargandoGuardar}
                                     />
                                     {erroresBackend.autor && (
                                         <div className="invalid-feedback">
-                                            {erroresBackend.autor.join(', ')}
+                                            {erroresBackend.autor.join(", ")}
                                         </div>
                                     )}
                                 </div>
+
                                 <div className="mb-3">
                                     <label className="form-label">ISBN</label>
-                                    <input 
-                                        type="text" 
-                                        name="isbn" 
-                                        className={`form-control ${erroresBackend.isbn ? 'is-invalid' : ''}`} 
-                                        value={formData.isbn} 
-                                        onChange={handleChange} 
-                                        required 
-                                        disabled={cargandoGuardar} 
+                                    <input
+                                        type="text"
+                                        name="isbn"
+                                        placeholder="Ej. 978-3-16-148410-0"
+                                        className={`form-control ${erroresBackend.isbn ? "is-invalid" : ""}`}
+                                        value={formData.isbn}
+                                        onChange={handleChange}
+                                        required
+                                        disabled={cargandoGuardar}
                                     />
                                     {erroresBackend.isbn && (
                                         <div className="invalid-feedback">
-                                            {erroresBackend.isbn.join(', ')}
+                                            {erroresBackend.isbn.join(", ")}
                                         </div>
                                     )}
                                 </div>
+
                                 <div className="mb-3">
                                     <label className="form-label">Páginas</label>
-                                    <input 
-                                        type="number" 
-                                        name="paginas" 
-                                        className={`form-control ${erroresBackend.paginas ? 'is-invalid' : ''}`} 
-                                        value={formData.paginas} 
-                                        onChange={handleChange} 
-                                        required 
-                                        disabled={cargandoGuardar} 
+                                    <input
+                                        type="number"
+                                        name="paginas"
+                                        className={`form-control ${erroresBackend.paginas ? "is-invalid" : ""}`}
+                                        value={formData.paginas}
+                                        onChange={handleChange}
+                                        required
+                                        disabled={cargandoGuardar}
                                     />
                                     {erroresBackend.paginas && (
                                         <div className="invalid-feedback">
-                                            {erroresBackend.paginas.join(', ')}
+                                            {erroresBackend.paginas.join(", ")}
                                         </div>
                                     )}
                                 </div>
+
                                 <div className="mb-3">
                                     <label className="form-label">Editorial</label>
-                                    <input 
-                                        type="text" 
-                                        name="editorial" 
-                                        className={`form-control ${erroresBackend.editorial ? 'is-invalid' : ''}`} 
-                                        value={formData.editorial} 
-                                        onChange={handleChange} 
-                                        required 
-                                        disabled={cargandoGuardar} 
+                                    <input
+                                        type="text"
+                                        name="editorial"
+                                        placeholder="Ej. Alfaguara"
+                                        className={`form-control ${erroresBackend.editorial ? "is-invalid" : ""}`}
+                                        value={formData.editorial}
+                                        onChange={handleChange}
+                                        required
+                                        disabled={cargandoGuardar}
                                     />
                                     {erroresBackend.editorial && (
                                         <div className="invalid-feedback">
-                                            {erroresBackend.editorial.join(', ')}
+                                            {erroresBackend.editorial.join(", ")}
                                         </div>
                                     )}
                                 </div>
+
                                 {/* Input para la foto que se guarda en la carpeta media */}
                                 <div className="mb-3">
                                     <label className="form-label">Foto (Carpeta Media)</label>
@@ -311,16 +357,17 @@ export default function LibrosApp() {
                                         type="file"
                                         name="foto"
                                         accept="image/jpeg"
-                                        className={`form-control ${erroresBackend.foto ? 'is-invalid' : ''}`}
+                                        className={`form-control ${erroresBackend.foto ? "is-invalid" : ""}`}
                                         onChange={handleChange}
                                         disabled={cargandoGuardar}
                                     />
                                     {erroresBackend.foto && (
                                         <div className="invalid-feedback">
-                                            {erroresBackend.foto.join(', ')}
+                                            {erroresBackend.foto.join(", ")}
                                         </div>
                                     )}
                                 </div>
+
                                 {/* Input para la foto que se guarda como bytes en la base de datos */}
                                 <div className="mb-3">
                                     <label className="form-label">Foto (Base de Datos)</label>
@@ -328,30 +375,54 @@ export default function LibrosApp() {
                                         type="file"
                                         name="foto_para_binario"
                                         accept="image/jpeg"
-                                        className={`form-control ${erroresBackend.foto_para_binario ? 'is-invalid' : ''}`}
+                                        className={`form-control ${erroresBackend.foto_para_binario ? "is-invalid" : ""}`}
                                         onChange={handleChange}
                                         disabled={cargandoGuardar}
                                     />
                                     {erroresBackend.foto_para_binario && (
                                         <div className="invalid-feedback">
-                                            {erroresBackend.foto_para_binario.join(', ')}
+                                            {erroresBackend.foto_para_binario.join(", ")}
                                         </div>
                                     )}
                                 </div>
+
                                 <div className="d-grid gap-2">
-        <button type="submit" className="btn btn-success" disabled={cargandoGuardar}>
-            {cargandoGuardar ? (
-                <><span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Guardando...</>
-            ) : (
-                editandoId ? 'Actualizar' : 'Guardar'
-            )}
-        </button>
-        {editandoId && (
-            <button type="button" className="btn btn-secondary" onClick={() => { setEditandoId(null); setFormData(estadoInicial); setErroresBackend({}); document.getElementById('form-libros').reset(); }} disabled={cargandoGuardar}>
-                Cancelar
-            </button>
-        )}
-    </div>
+                                    <button
+                                        type="submit"
+                                        className="btn btn-success"
+                                        disabled={cargandoGuardar}
+                                    >
+                                        {cargandoGuardar ? (
+                                            <>
+                                                <span
+                                                    className="spinner-border spinner-border-sm me-2"
+                                                    role="status"
+                                                    aria-hidden="true"
+                                                ></span>
+                                                Guardando...
+                                            </>
+                                        ) : editandoId ? (
+                                            "Actualizar"
+                                        ) : (
+                                            "Guardar"
+                                        )}
+                                    </button>
+                                    {editandoId && (
+                                        <button
+                                            type="button"
+                                            className="btn btn-secondary"
+                                            onClick={() => {
+                                                setEditandoId(null);
+                                                setFormData(estadoInicial);
+                                                setErroresBackend({});
+                                                document.getElementById("form-libros").reset();
+                                            }}
+                                            disabled={cargandoGuardar}
+                                        >
+                                            Cancelar
+                                        </button>
+                                    )}
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -371,7 +442,7 @@ export default function LibrosApp() {
                                 subHeader
                                 subHeaderComponent={barraDeBusqueda}
                                 subHeaderAlign="right"
-                                noDataComponent="No hay libros que coincidan con la búsqueda"                             
+                                noDataComponent="No hay libros que coincidan con la búsqueda"
                                 progressPending={cargandoTabla}
                                 progressComponent={<SpinnerTabla />}
                             />

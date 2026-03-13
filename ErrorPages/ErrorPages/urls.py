@@ -6,6 +6,11 @@ from core import views as core
 from error_reports import views as error_reports
 from registro import views as registro
 from apiLibrosJona import views as libro
+from usuarios.views import RegistroView
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,6 +30,11 @@ urlpatterns = [
     path('librosn/editar/<int:pk>', libro.api_editar_libro, name='editar_libro'),
     path('librosn/eliminar/<int:pk>', libro.api_eliminar_libro, name='eliminar_libro'),
     path('', core.index, name='index'),
+    # Endpoint para iniciar sesión (recibe email y password, devuelve access y refresh tokens)
+    path('api/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    # Endpoint para refrescar el token (recibe el refresh token, devuelve un nuevo access token)
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/registro/', RegistroView.as_view(), name='registro'),
 ]
 
 # Esto permite visualizar las imágenes en modo DEBUG (desarrollo)
